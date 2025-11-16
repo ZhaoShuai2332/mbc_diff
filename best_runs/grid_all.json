@@ -1,0 +1,23 @@
+[
+  {
+    "rounds": 2,
+    "prob": 0.0625,
+    "neglog2p": 4.0,
+    "actives": 2,
+    "path_file": "best_runs\\best_R2.json"
+  },
+  {
+    "rounds": 3,
+    "prob": 0.00390625,
+    "neglog2p": 8.0,
+    "actives": 4,
+    "path_file": "best_runs\\best_R3.json"
+  },
+  {
+    "rounds": 4,
+    "prob": 0.000244140625,
+    "neglog2p": 12.0,
+    "actives": 6,
+    "path_file": "best_runs\\best_R4.json"
+  }
+]
