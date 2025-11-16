@@ -1,37 +1,40 @@
-import argparse, math
+import argparse, math, csv
 from active_sboxes import min_active_for_rounds
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--p-threshold", type=int, default=2,
-                    help="probability threshold base b, default 2 (i.e., 2^-exp)")
-    ap.add_argument("--p-exp", type=int, default=16,
-                    help="probability threshold exponent (2^-exp)")
-    ap.add_argument("--pmax", type=float, default=None,
-                    help="override S-box max differential probability (default computed from DDT of PRESENT S-box = 0.25)")
+    ap.add_argument("--p-threshold", type=int, default=2)
+    ap.add_argument("--p-exp", type=int, default=16)
+    ap.add_argument("--pmax", type=float, default=None)
+    ap.add_argument("--rmin", type=int, default=1)
     ap.add_argument("--rmax", type=int, default=12)
+    ap.add_argument("--out", default="longest_threshold.csv")
     args = ap.parse_args()
 
-    # DP budget in terms of active S-boxes: w_max = floor( -log(threshold) / -log(pmax) )
-    p_threshold = (args.p-threshold if False else math.pow(args.p_threshold, -args.p_exp))  # keep for clarity
-    # p_threshold = 2^-exp
+    pt_val = math.pow(args.p_threshold, -args.p_exp)
     exp_t = args.p_exp * math.log(args.p_threshold, 2)
-
     pmax = args.pmax if args.pmax is not None else 0.25
-    exp_per_active = -math.log(pmax, 2)  # e.g., 2.0 if pmax=1/4
-    w_max = math.floor(exp_t / exp_per_active + 1e-9)
-    print(f"Probability threshold = 2^-{args.p_exp}; pmax={pmax}; active budget w_max={w_max}")
+    exp_pa = -math.log(pmax, 2)
+    w_max = math.floor(exp_t / exp_pa + 1e-9)
+    print(f"threshold=2^-{args.p_exp} ({pt_val:.3e}); pmax={pmax}; w_max={w_max}")
 
+    rows = [("round", "min_total_actives", "feasible")]
     best_R = 0
-    for r in range(1, args.rmax+1):
+    for r in range(args.rmin, args.rmax+1):
         total, per_round = min_active_for_rounds(r)
-        if total <= w_max:
+        feas = total <= w_max
+        if feas:
             best_R = r
-            print(f"R={r}: feasible (min total actives={total} <= {w_max})")
+            print(f"R={r}: feasible; min_total={total} <= {w_max}")
         else:
-            print(f"R={r}: infeasible (min total actives={total} > {w_max})")
+            print(f"R={r}: infeasible; min_total={total} > {w_max}")
+            rows.append((r, total, int(feas)))
             break
-    print(f"[RESULT] Longest rounds satisfying threshold: R={best_R}")
+        rows.append((r, total, int(feas)))
+
+    with open(args.out, "w", newline="") as f:
+        csv.writer(f).writerows(rows)
+    print(f"[RESULT] longest_R={best_R}; saved={args.out}")
 
 if __name__ == "__main__":
     main()

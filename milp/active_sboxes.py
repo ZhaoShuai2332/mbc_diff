@@ -1,6 +1,9 @@
 # MILP model (PuLP+CBC) for minimal number of active S-boxes
 from typing import List, Tuple
 import pulp
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from mbc.sbox import DDT
 
 # nibble index 0..3; each nibble has 4 bits -> bit indices in 0..15
 def nibble_bits(j: int) -> List[int]:
@@ -8,6 +11,18 @@ def nibble_bits(j: int) -> List[int]:
 
 # permutation for 16-bit
 PBOX = [(i % 4)*4 + (i // 4) for i in range(16)]
+
+def _branch_number() -> int:
+    bmin = 16
+    for a in range(1,16):
+        for b in range(1,16):
+            if DDT[a][b] > 0:
+                w = bin(a).count("1") + bin(b).count("1")
+                if w < bmin:
+                    bmin = w
+    return bmin
+
+BRANCH = _branch_number()
 
 def min_active_for_rounds(rounds: int) -> Tuple[int, List[int]]:
     # Variables:
@@ -27,16 +42,13 @@ def min_active_for_rounds(rounds: int) -> Tuple[int, List[int]]:
     for r in range(rounds):
         for j in range(4):
             bits = nibble_bits(j)
-            # each bit <= a
             for b in bits:
                 prob += x[r][b] <= a[r][j]
-            # if a==1 at least one input bit is 1
             prob += pulp.lpSum(x[r][b] for b in bits) >= a[r][j]
-
-            # S-box property (coarse): if active then some output bit 1; if not active, no output bit
             for b in bits:
                 prob += y[r][b] <= a[r][j]
             prob += pulp.lpSum(y[r][b] for b in bits) >= a[r][j]
+            prob += pulp.lpSum(x[r][b] for b in bits) + pulp.lpSum(y[r][b] for b in bits) >= BRANCH * a[r][j]
 
     # propagation by PBOX: x[r+1] == PBOX(y[r])
     for r in range(rounds-1):
