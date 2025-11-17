@@ -39,12 +39,12 @@ pip install -r requirements.txt
 # 一键复现实验（推荐）
 python scripts/run_all.py
 ```
-
+<!-- 
 ```powershell
 python -m venv venv; .\venv\Scripts\activate
 pip install -r requirements.txt
 python scripts\run_all.py
-```
+``` -->
 
 <a id="core"></a>
 ## 🎯 核心结论
