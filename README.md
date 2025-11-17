@@ -7,9 +7,9 @@
 <img src="https://img.shields.io/badge/MILP-PuLP%2FCBC-00A98F" alt="MILP" />
 <img src="https://img.shields.io/badge/Cipher-SPN_16bit-8A2BE2" alt="SPN" />
 <img src="https://img.shields.io/badge/Analysis-DDT%20%26%20MonteCarlo-FF6F61" alt="Analysis" />
-<img src="https://img.shields.io/badge/OS-Windows-0078D6?logo=windows&logoColor=white" alt="Windows" />
-<img src="https://img.shields.io/badge/OS-macOS-000000?logo=apple&logoColor=white" alt="macOS" />
-<img src="https://img.shields.io/badge/OS-Linux-FCC624?logo=linux&logoColor=black" alt="Linux" />
+<!-- <img src="https://img.shields.io/badge/OS-Windows-0078D6?logo=windows&logoColor=white" alt="Windows" /> -->
+<!-- <img src="https://img.shields.io/badge/OS-macOS-000000?logo=apple&logoColor=white" alt="macOS" /> -->
+<!-- <img src="https://img.shields.io/badge/OS-Linux-FCC624?logo=linux&logoColor=black" alt="Linux" /> -->
 </p>
 
 <p>
