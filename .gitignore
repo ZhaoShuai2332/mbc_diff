@@ -12,3 +12,5 @@ mbc/__pycache__/cipher.cpython-311.pyc
 mbc/__pycache__/perm.cpython-311.pyc
 mbc/__pycache__/sbox.cpython-311.pyc
 res.txt
+data_active1.csv
+best_r41.json

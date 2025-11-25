@@ -9,3 +9,16 @@ python verify/monte_carlo.py --rounds 4 --path best_r4.json --trials 262144
 python milp/longest_threshold.py --p-threshold 2 --p-exp 16 --rmax 12
 python diffsearch/bfs_search.py --rounds 8 --save best_r8.json
 python verify/monte_carlo.py --rounds 8 --path best_r8.json --trials 262144
+
+
+# 问题1：计算 1..10 轮的激活下界 → CSV
+python milp/run_active_range.py --start 1 --end 10 --out data_active1.csv
+
+# 问题2：在阈值 p≥2^-16 下寻找最长轮数
+python milp/longest_threshold.py --p-threshold 2 --p-exp 16 --rmax 12
+
+# 固定轮数搜索最佳差分特征（示例 R=4）
+python diffsearch/bfs_search.py --rounds 4 --save best_r41.json
+
+# 蒙特卡罗验证（示例 R=4）
+python verify/monte_carlo.py --rounds 4 --path best_r41.json --trials 262144
